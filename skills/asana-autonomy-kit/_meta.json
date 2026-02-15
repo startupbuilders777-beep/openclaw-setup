@@ -1,0 +1,12 @@
+{
+  "name": "asana-autonomy-kit",
+  "version": "1.0.0",
+  "description": "Self-sustaining agent that works from Asana tasks 24/7",
+  "homepage": "https://github.com/startupbuilders777-beep/openclaw-setup",
+  "metadata": {
+    "openclaw": {
+      "emoji": "⚡",
+      "category": "productivity"
+    }
+  }
+}

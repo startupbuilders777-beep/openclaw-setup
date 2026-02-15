@@ -1,0 +1,12 @@
+{
+  "name": "asana-workflow",
+  "version": "1.0.0",
+  "description": "Self-sustaining workflow using Asana as single source of truth",
+  "homepage": "https://github.com/startupbuilders777-beep/openclaw-setup",
+  "metadata": {
+    "openclaw": {
+      "emoji": "📋",
+      "category": "workflow"
+    }
+  }
+}
