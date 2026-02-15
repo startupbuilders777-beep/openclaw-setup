@@ -1,5 +1,9 @@
 # Heartbeat Routine — Killer's Autonomous System
 
+## Skills
+- **asana-autonomy-kit** — Self-sustaining workflow from Asana
+- **asana-workflow** — Complete workflow with Asana as source of truth
+
 ## Overview
 - **Coordinator:** Killer (main agent)
 - **Task System:** Asana (Jira-style tickets)
