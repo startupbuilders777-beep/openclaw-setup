@@ -1,4 +1,44 @@
+<<<<<<< HEAD
 projects/
 agents/
 memory/
 .learnings/
+=======
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+.next/
+out/
+build/
+dist/
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug
+npm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Prisma
+prisma/migrations/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+>>>>>>> 844552d526f03bfb8d4d32e67940c23dc4980eb8
