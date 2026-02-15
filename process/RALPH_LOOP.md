@@ -47,7 +47,7 @@ Each feature becomes an Asana task with:
 ### Step 3: Execute Task
 1. Assign to self in Asana
 2. Set status to "In Progress"
-3. Do the work
+3. Do the work, **anticipating any potential pitfalls**
 4. Validate
 
 ### Step 4: Validation
