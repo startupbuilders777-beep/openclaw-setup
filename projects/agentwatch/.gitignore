@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+projects/
+agents/
+memory/
+.learnings/
+=======
 # Dependencies
 node_modules/
 .pnp
@@ -35,3 +41,4 @@ prisma/migrations/
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+>>>>>>> 844552d526f03bfb8d4d32e67940c23dc4980eb8

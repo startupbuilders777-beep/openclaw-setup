@@ -1,0 +1,12 @@
+{
+  "name": "asana-mcp",
+  "version": "1.0.1",
+  "description": "Hybrid Asana MCP + REST for fast task management",
+  "homepage": "https://github.com/startupbuilders777-beep/openclaw-setup",
+  "metadata": {
+    "openclaw": {
+      "emoji": "📋",
+      "category": "productivity"
+    }
+  }
+}
