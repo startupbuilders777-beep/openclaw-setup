@@ -6,6 +6,38 @@ See **RULES.md** for the complete operating rules and constraints.
 ## Skills
 - **asana-autonomy-kit** — Self-sustaining workflow from Asana
 - **asana-workflow** — Complete workflow with Asana as source of truth
+- **Ralph Loop** — See process/RALPH_LOOP.md
+
+## Self-Sustaining Loop
+
+The system runs 24/7 with these cron jobs:
+
+| Job | Frequency | What It Does |
+|-----|-----------|--------------|
+| Execute Asana Tasks | 30 min | Query Asana → spawn builder → mark complete |
+| B2B Scout & Ideas | 1 hour | Research → post ideas → create Asana tasks |
+| Competitor Analysis | 1 hour | Research competitors → post gaps |
+| GitHub Sync | 2 hours | Push code to project repos |
+| QA Verification | 12 hours | Build projects → verify → create issues |
+| Daily Memory | 24 hours | Log learnings → commit to git |
+
+### Loop Flow
+```
+Cron fires → Query Asana → Pick task → Execute → Validate → Mark Complete
+                     ↑                                              ↓
+                     └──────────────────────────────────────────────┘
+```
+
+### Ralph Loop (see process/RALPH_LOOP.md)
+```
+1. Pick task from Asana (highest priority)
+2. Create subtasks from PRD/features
+3. Execute subtask
+4. Validate (code works? meets spec?)
+5. If complete → mark done in Asana
+   If incomplete → write progress, spawn new session
+6. Continue until done
+```
 
 ## Overview
 - **Coordinator:** Killer (main agent)
