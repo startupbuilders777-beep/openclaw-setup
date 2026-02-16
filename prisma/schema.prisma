@@ -177,10 +177,82 @@ model TelegramUser {
   
   // Relations
   agents          Agent[]  // Agents owned by this user
+  notificationPreferences NotificationPreference[]
+  notificationLogs       NotificationLog[]
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   
   @@index([telegramId])
   @@index([authToken])
+}
+
+// Notification preference - stores how users want to be notified
+model NotificationPreference {
+  id              String   @id @default(cuid())
+  userId          String
+  user            TelegramUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Channel preferences
+  telegramEnabled Boolean  @default(true)
+  discordEnabled  Boolean  @default(false)
+  emailEnabled    Boolean  @default(false)
+  
+  // Event preferences
+  onTaskComplete  Boolean  @default(true)
+  onTaskFail      Boolean  @default(true)
+  onAgentError    Boolean  @default(true)
+  onBudgetAlert   Boolean  @default(true)
+  onAgentNeedsInput Boolean @default(true)
+  
+  // Custom webhook URL (for integrations)
+  webhookUrl      String?
+  webhookSecret   String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([userId])
+  @@index([userId])
+}
+
+// Notification log - tracks sent notifications
+model NotificationLog {
+  id              String   @id @default(cuid())
+  userId          String
+  user            TelegramUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Notification details
+  channel         NotificationChannel
+  eventType       String   // e.g., 'task.complete', 'task.fail'
+  message         String
+  
+  // Delivery status
+  status          NotificationStatus @default(PENDING)
+  errorMessage    String?
+  
+  // Related entities
+  agentId         String?
+  taskId          String?
+  
+  createdAt       DateTime @default(now())
+  sentAt          DateTime?
+  
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum NotificationChannel {
+  TELEGRAM
+  DISCORD
+  EMAIL
+  WEBHOOK
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  RETRYING
 }
