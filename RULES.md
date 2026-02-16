@@ -11,6 +11,8 @@
 3. **GitHub is the ONLY source of truth for code** - Each project in its own repo
 4. **Never fake progress** - Only post real data from APIs
 5. **Self-improvement is mandatory** - Log errors, corrections, learnings
+6. **Distributed System: Asana is the coordinator** - Assign tasks in Asana, not local files
+7. **Never pollute context with local tracking files** - Read Asana for state
 
 ---
 
