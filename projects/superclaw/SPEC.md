@@ -149,3 +149,25 @@ Telegram/Discord → Webhook → User DB → Agent Container
 **Demo**: Sign up → Pick skills → Done → It works
 
 **Call to action**: Your AI employee starts now
+
+## Connections (OAuth)
+
+- Telegram
+- Discord  
+- Slack
+
+## Dashboard Configurable
+
+- Skill selection (drag-drop)
+- Prompt templates
+- Default layouts
+- Cron scheduling
+
+## Social Media Skills
+
+- Content Writer
+- SEO Optimizer
+- Hashtag Research
+- Trend Spotter
+- Engagement Auto-reply
+- Scheduler
