@@ -3,7 +3,6 @@ import AgentStatusPanel from './components/AgentStatusPanel'
 export default function Home() {
   return (
     <main className="min-h-screen bg-slate-950">
-      {/* Header */}
       <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -28,17 +27,13 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Agent Status Panel - Takes 2 columns */}
           <div className="lg:col-span-2">
             <AgentStatusPanel />
           </div>
 
-          {/* Quick Stats Sidebar */}
           <div className="space-y-6">
-            {/* System Health */}
             <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
               <h3 className="text-lg font-semibold text-white mb-4">System Health</h3>
               <div className="space-y-4">
@@ -71,24 +66,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            {/* Recent Activity */}
-            <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Recent Activity</h3>
-              <div className="space-y-3">
-                {[
-                  { time: '2m ago', action: 'Builder completed task', status: 'success' },
-                  { time: '5m ago', action: 'Deploy agent deployed v2.1', status: 'success' },
-                  { time: '12m ago', action: 'QA approved PR #42', status: 'success' },
-                  { time: '18m ago', action: 'Killer spawned sub-agent', status: 'info' },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-sm">
-                    <span className="text-slate-500 text-xs">{item.time}</span>
-                    <span className="text-slate-300">{item.action}</span>
-                  ))}
-              </div>
-            </div </div>
-               >
           </div>
         </div>
       </div>
