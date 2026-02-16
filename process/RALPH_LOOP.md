@@ -1,209 +1,191 @@
-# Ralph Loop — Adapted for Asana
+# Ralph Loop — Execution Framework
 
-*The autonomous development loop. Continuous, validated, never stops.*
+## Overview
+
+Ralph Loop is my execution engine. It transforms Asana tasks into shippable code through a disciplined, TDD-driven process.
 
 ---
 
-## The Loop
+## THE LOOP
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    RALPH LOOP                               │
-├─────────────────────────────────────────────────────────────┤
-│  1. Pick task from Asana (highest priority)              │
-│  2. Create subtasks from PRD/features                       │
-│  3. Execute subtask                                        │
-│  4. Validate output                                        │
-│     - Code works?                                          │
-│     - Meets spec?                                           │
-│  5. If complete → mark done in Asana                      │
-│     If incomplete → write progress to task comments         │
-│  6. Spawn new session with context                         │
-│  7. Continue until done                                    │
-│  8. Compact progress → Asana comments                      │
-└─────────────────────────────────────────────────────────────┘
+1. FRESH CONTEXT → Get Asana task details
+2. BREAK → Create subtasks/checklist
+3. CODE → Implement with TDD
+4. VALIDATE → Run tests + type checks
+5. COMPLETE → Mark done in Asana
 ```
 
 ---
 
-## Task Breakdown
+## 1. FRESH CONTEXT
 
-### Step 1: PRD → Features
-For each project, break PRD into features:
-```
-PRD (Product Requirements)
-    ↓
-Features (distinct capabilities)
-    ↓
-Tasks (Asana subtasks)
-```
+**Before touching code, ALWAYS get fresh context from Asana:**
 
-### Step 2: Features → Asana Tasks
-Each feature becomes an Asana task with:
-- **Name**: Feature title
-- **Description**: Context + Acceptance Criteria
-- **Subtasks**: Checklist items in description
-
-### Step 3: Execute Task
-1. Assign to self in Asana
-2. Set status to "In Progress"
-3. Do the work, **anticipating any potential pitfalls**
-4. Validate
-
-### Step 4: Validation
-
-**Code Validation:**
-- [ ] Code written
-- [ ] Compiles/builds
-- [ ] No obvious bugs
-
-**Spec Validation:**
-- [ ] Matches acceptance criteria
-- [ ] Works as expected
-
-### Step 5: Complete or Continue
-
-**If Complete:**
-- Mark task complete in Asana
-- Add completion comment: "Done! [summary]"
-- Pick next task
-
-**If Incomplete:**
-- Add progress comment: "In progress. Currently: [what]. Still need: [what]"
-- Save context to `progress_[task_id].txt`
-- Spawn new agent session with context
-- Continue working
-
----
-
-## Progress Context File
-
-When a task spans multiple sessions, save context:
-
-```markdown
-# Progress: [Task Name]
-## Task ID: [Asana GID]
-## Status: In Progress
-
-## What Was Done
-- [x] Component X created
-- [x] API endpoint Y working
-
-## Current Work
-- Working on: Z
-- Blocked by: none
-
-## Remaining
-- [ ] Need to implement A
-- [ ] Then B
-- [ ] Then test C
-
-## Notes
-Any additional context
-```
-
----
-
-## Spawning with Context
-
-When continuing a task:
 ```bash
-# Get task context
-cat progress_[task_id].txt
+TOKEN="2/1213287152205467/1213287139030185:70bce90f612d0ea072617e4dc8686bcd"
+TASK_GID="1213287174963537"
 
-# Spawn agent with context
-sessions_spawn with task including:
-- Current progress
-- What's remaining
-- Technical context
+# Get task with full details
+curl -s -H "Authorization: Bearer $TOKEN" \
+  "https://app.asana.com/api/1.0/tasks/$TASK_GID?opt_fields=name,notes,assignee,due_date,custom_fields"
 ```
+
+**What to capture:**
+- Task name + description
+- Acceptance criteria
+- Technical notes
+- Dependencies
 
 ---
 
-## Asana Integration
+## 2. BREAK (Subtasks)
 
-### Create Feature Task
+If task is large, break into subtasks:
+
 ```bash
-# Create task with subtasks in description
-curl -X POST "https://app.asana.com/api/1.0/tasks" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{
-    "data": {
-      "name": "[FEATURE] Feature Name",
-      "projects": ["PROJECT_GID"],
-      "notes": "## Context\n...\n## Acceptance Criteria\n- [ ] ...\n## Subtasks\n- [ ] ..."
-    }
-  }'
+# Create subtask
+curl -s -X POST -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"data": {"name": "Subtask name", "parent": "TASK_GID"}}' \
+  "https://app.asana.com/api/1.0/subtasks"
 ```
 
-### Update Progress
+---
+
+## 3. CODE (TDD)
+
+### Test First, Then Code
+
 ```bash
-# Add progress comment
-curl -X POST "https://app.asana.com/api/1.0/tasks/[TASK_GID]/stories" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"data": {"text": "Progress: Working on X. Still need Y."}}'
+# 1. Write test first (must fail)
+npm run test
+# Expected: FAIL - feature doesn't exist yet
+
+# 2. Implement feature
+# ... code ...
+
+# 3. Run tests again (should pass)
+npm run test
 ```
 
-### Mark Complete
+### Pre-commit Checks
+
 ```bash
-curl -X PUT "https://app.asana.com/api/1.0/tasks/[TASK_GID]" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{"data": {"completed": true}}'
+# Type check
+npm run type-check
+
+# Lint
+npm run lint
+
+# Build
+npm run build
+```
+
+All must pass before pushing.
+
+---
+
+## 4. VALIDATE
+
+### Checklist
+
+- [ ] Tests pass (`npm run test`)
+- [ ] Type check passes (`npm run type-check`)
+- [ ] Build succeeds (`npm run build`)
+- [ ] No lint errors
+- [ ] PR created (if applicable)
+
+### Run Locally
+
+```bash
+# Full validation
+npm run type-check && npm run lint && npm run test && npm run build
 ```
 
 ---
 
-## Circuit Breaker
+## 5. COMPLETE
 
-If > 3 consecutive failures on same task:
-1. Stop the loop
-2. Log the errors to memory
-3. Notify Harry
-4. Wait for human intervention
+### Mark Task Done
 
----
-
-## Exit Conditions
-
-Task is truly complete when:
-1. All acceptance criteria checked off
-2. Code works (builds/runs)
-3. Added completion comment in Asana
-4. No blocking issues
-
----
-
-## Key Rules
-
-1. **Always break into subtasks** - Don't tackle big blobs
-2. **Validate after each subtask** - Catch issues early
-3. **Update Asana constantly** - It's the source of truth
-4. **Save progress context** - For session continuity
-5. **Spawn agents for parallel work** - Don't bottleneck
-6. **Never leave stale tasks** - Complete or update progress
-
----
-
-## Ralph + Asana Workflow
-
+```bash
+curl -s -X PUT -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"data": {"completed": true}}' \
+  "https://app.asana.com/api/1.0/tasks/$TASK_GID"
 ```
-Heartbeat fires
-    ↓
-Check Asana for incomplete tasks
-    ↓
-Pick highest priority task
-    ↓
-Break into subtasks (if not already)
-    ↓
-Execute subtask
-    ↓
-Validate
-    ↓
-    ├─ Complete → Mark done, next task
-    │
-    └─ Incomplete → Add progress, spawn session, continue
+
+### Add Completion Comment
+
+```bash
+curl -s -X POST -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"data": {"text": "✅ Completed - [summary of work]"}}' \
+  "https://app.asana.com/api/1.0/tasks/$TASK_GID/stories"
 ```
 
 ---
 
-*Never stop. Always make progress. Asana is the truth.*
+## Branch Strategy
+
+```
+feature/TASK-ID-description
+fix/TASK-ID-bug-description
+```
+
+### Commit Format
+
+```
+[TASK-ID] Brief description
+
+- What changed
+- Why
+```
+
+---
+
+## Quick Start
+
+```bash
+# Pick task → Fresh context → Code → Validate → Complete
+
+# 1. Get task
+TASK_GID="1213287174963537"
+
+# 2. Fresh Asana context
+curl -s -H "Authorization: Bearer $TOKEN" \
+  "https://app.asana.com/api/1.0/tasks/$TASK_GID?opt_fields=name,notes"
+
+# 3. TDD
+npm run test  # Write failing test first
+# ... implement ...
+npm run test  # Should pass
+
+# 4. Pre-push checks
+npm run type-check && npm run build
+
+# 5. Commit
+git add -A
+git commit -m "[TASK-ID] Description"
+
+# 6. Mark complete
+curl -s -X PUT -H "Authorization: Bearer $TOKEN" \
+  -d '{"data": {"completed": true}}' \
+  "https://app.asana.com/api/1.0/tasks/$TASK_GID"
+```
+
+---
+
+## Anti-Patterns
+
+❌ **No stale context** - Always query fresh Asana data  
+❌ **Skip tests** - TDD or no code  
+❌ **Skip type check** - Must pass before push  
+❌ **Skip lint** - Code style matters  
+❌ **Skip build** - Must compile successfully  
+❌ **Fake progress** - Don't mark done until validated
+
+---
+
+*Test first. Validate. Complete.*
