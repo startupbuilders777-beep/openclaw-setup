@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'AgentWatch - AI Agent Monitoring Platform',
-  description: 'Monitor your AI agents, track token usage, costs, and errors in real-time.',
+  title: 'Mission Control - Agent Orchestration Dashboard',
+  description: 'Monitor and orchestrate your AI agents in real-time.',
 }
 
 export default function RootLayout({

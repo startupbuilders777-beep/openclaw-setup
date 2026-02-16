@@ -1,7 +1,7 @@
 {
-  "name": "agentwatch",
+  "name": "mission-control",
   "version": "1.0.0",
-  "description": "AI Agent Monitoring Platform - Datadog for AI agents",
+  "description": "Mission Control Dashboard - AI Agent Orchestration Platform",
   "private": true,
   "scripts": {
     "dev": "next dev",
