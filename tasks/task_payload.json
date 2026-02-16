@@ -1,0 +1,6 @@
+{
+  "name": "Add budget enforcement / circuit breakers",
+  "notes": "Gap found from competitor analysis. Most tools only track costs but don't enforce limits.\n\nFeature ideas:\n- Pause agent when spend threshold hit\n- Queue tasks instead of executing (backpressure)\n- Auto-retry with cheaper models when budget low\n- Show projected cost before task execution\n\nCompetitors: LangSmith, Helicone, AgentOps",
+  "projects": ["1213277278397665"],
+  "workspace": "1213287151552231"
+}

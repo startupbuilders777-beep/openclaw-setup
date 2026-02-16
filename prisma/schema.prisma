@@ -21,6 +21,10 @@ model Agent {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Telegram user ownership
+  ownerId     String?
+  owner       TelegramUser? @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+
   tasks        Task[]
   usageRecords UsageRecord[]
   errorLogs    ErrorLog[]
@@ -154,4 +158,29 @@ enum BudgetType {
   DAILY
   WEEKLY
   MONTHLY
+}
+
+// Telegram User model - represents a Telegram user authenticated via OAuth
+model TelegramUser {
+  id              String   @id @default(cuid())
+  telegramId      String   @unique // Telegram user ID (from @BotFather)
+  username        String?
+  firstName       String
+  lastName        String?
+  languageCode    String?
+  isPremium       Boolean  @default(false)
+  
+  // OAuth fields
+  authToken       String?  @unique // Token for OAuth authentication
+  authTokenExpiry DateTime?
+  isAuthenticated Boolean  @default(false)
+  
+  // Relations
+  agents          Agent[]  // Agents owned by this user
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([telegramId])
+  @@index([authToken])
 }
