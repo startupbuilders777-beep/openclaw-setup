@@ -19,7 +19,18 @@ The system runs 24/7 with these cron jobs:
 | Competitor Analysis | 1 hour | Research competitors → post gaps |
 | GitHub Sync | 2 hours | Push code to project repos |
 | QA Verification | 12 hours | Build projects → verify → create issues |
-| Daily Memory | 24 hours | Log learnings → commit to git |
+| Daily Memory | 24 hours | Log learnings → Obsidian daily note → commit to git |
+
+### Daily Memory Process (Obsidian)
+1. Create/update `obsidian/daily/YYYY-MM-DD.md`
+2. Log: learnings, blockers, tasks completed
+3. Update `MEMORY.md` if core info changed
+4. Commit to git
+
+### Obsidian for Projects
+- Project specs → `obsidian/projects/[project]/SPEC.md`
+- Bugs → `obsidian/projects/[project]/DEBUG.md`
+- Retrospectives → `obsidian/projects/[project]/RETROSPECTIVE.md`
 
 ### Loop Flow
 ```
