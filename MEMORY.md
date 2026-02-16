@@ -20,16 +20,37 @@
 |---------|--------|----------|
 | **AgentWatch** | In Progress | P0 |
 | **NexusAI** | In Progress | P1 |
-| **Whop Course** | Done | - |
-| **RedditAutoMarket** | Done | - |
+| **SafeAgent** | In Progress | P1 |
+| **Mission Control** | Planning | P2 |
+
+---
+
+## Agent Architecture
+
+| Agent | ID | Role | Workspace |
+|-------|----|------|-----------|
+| **Sage** | main | PM Coordinator | ~/.openclaw/workspace |
+| **Forge** | builder | Full-Stack Dev | ~/agents/builder |
+| **Check** | qa | QA Engineer (Playwright) | ~/agents/qa |
+| **Deploy** | deploy | DevOps | ~/agents/deploy |
+
+### Pipeline Flow
+```
+Sage (creates prioritized tasks in Asana)
+  → Forge (picks highest priority, builds, tests)
+    → Check (runs Playwright e2e, validates)
+      → Deploy (ships to production)
+        → Sage (monitors, reports to Harry)
+```
 
 ---
 
 ## Key Preferences
 
 - **Communication:** Discord (#general, #builds, #qa, #deploys, #ideas)
-- **Task Management:** Asana (source of truth)
-- **Code Style:** TypeScript, Tailwind, Prisma, Next.js
+- **Task Management:** Asana (ONLY source of truth)
+- **Code Style:** TypeScript, Tailwind, Prisma, Next.js 15
+- **Testing:** Playwright (e2e), Vitest (unit)
 - **No fluff:** Direct, actionable responses
 
 ---
@@ -37,9 +58,9 @@
 ## Technical
 
 - **Gateway:** localhost:18789
-- **Model:** MiniMax M2.5 (default), M2.5-highspeed (fast)
+- **Model:** MiniMax M2.5 (all agents, all tasks)
 - **Exec:** Full mode (no approval needed)
-- **GitHub:** https://github.com/startupbuilders777-beep/openclaw-setup
+- **GitHub:** https://github.com/startupbuilders777-beep
 
 ---
 
@@ -53,13 +74,25 @@
 | SafeAgent | 1213287696255155 |
 | Mission Control | 1213291640888794 |
 
+**Asana Token:** Available as `$ASANA_TOKEN` environment variable. Use it in API calls:
+```bash
+curl -s -H "Authorization: Bearer $ASANA_TOKEN" "https://app.asana.com/api/1.0/..."
+```
+
 ---
 
-## CRITICAL: Asana Token
+## Task Priority System
 
-```
-TOKEN="2/1213287152205467/1213287139030185:70bce90f612d0ea072617e4dc8686bcd"
-```
+All tasks MUST have a priority tag in Asana:
+
+| Tag | Meaning | SLA |
+|-----|---------|-----|
+| `P0-critical` | Blocking, bugs, launch requirements | Build within 1 hour |
+| `P1-high` | Core features, important improvements | Build within 4 hours |
+| `P2-medium` | Nice-to-haves, optimizations | Build within 24 hours |
+| `P3-low` | Ideas, research, future work | When backlog is empty |
+
+Forge picks tasks in priority order. Sage ensures all tasks are tagged.
 
 ---
 
@@ -73,75 +106,33 @@ node_modules/
 .env.local
 *.log
 .DS_Store
+dist/
+coverage/
+test-results/
+playwright-report/
 ```
 
 ---
 
-## Cron Jobs
+## CRITICAL: Rules
 
-| Job | Frequency | Status |
-|-----|-----------|--------|
-| Sage PM | 30 min | Pipeline health |
-| Forge | 30 min | Build tasks |
-| Check QA | 1 hour | Verify builds |
-| Deploy | 1 hour | Ship to production |
-| Reconcile | 1 hour | Fix stale tasks |
-| System Health | 5 min | Alert on failures |
-| NexusAI | 1213277068607518 |
-| Whop Course | 1213287173636195 |
-| RedditAutoMarket | 1213287173640360 |
+### Source of Truth
+- **Asana IS the source of truth** — Always query Asana API directly
+- NEVER create local task files (no board.json, no QUEUE.md, no local boards)
+- NEVER post numbers from local files — only from real Asana queries
 
----
-
-## CRITICAL: NEVER USE LOCAL FILES FOR TASKS
-
-### Task Source of Truth
-- **Asana IS the source of truth** - Always query Asana API directly
-- NEVER read local tasks/QUEUE.md or tasks/board.json for task status
-- NEVER post numbers from local files - only from real Asana queries
-- If you need task info, call the Asana API directly
-
-### Asana Token
-```
-TOKEN="2/1213287152205467/1213287139030185:70bce90f612d0ea072617e4dc8686bcd"
-```
-
-### Quick Query
-```bash
-for pid in 1213277068607518 1213277278397665 1213287173640360 1213287696255155; do
-  curl -s -H "Authorization: Bearer $TOKEN" "https://app.asana.com/api/1.0/projects/$pid/tasks?completed=false" | jq '.data | length'
-done
-```
-
----
-
-## CRITICAL: How I Work With Harry
-
-### When Blocked (MUST DO)
-- If I don't have specs → tell you EXACTLY what I need in Discord
-- If I'm stuck → say "BLOCKED: [reason]" explicitly
+### Honesty Protocol
 - Never fake progress, never post empty updates
-- Tell you what I need to unblock
-
-### Asana Protocol
-- Query Asana at start of EVERY session to see REAL tasks
-- Create tickets myself when I find work to do
-- Update with actual progress, not fake numbers
-
-### Before Posting Updates
-- Actually check Asana first (via API, not local files)
-- If no real work → say that, don't fabricate
+- If blocked → say "BLOCKED: [reason]" explicitly in Discord
+- If no real work happened → say that, don't fabricate
 - NEVER POST FAKE NUMBERS
 
+### Agent Discipline
+- **Concurrency:** Only 1 agent per task. Check before assigning.
+- **Commits:** Every commit must reference Asana task: `feat(scope): desc [ASANA-<gid>]`
+- **Blocking:** Always tell Harry when blocked + what you need to unblock
+- **Max 2 hours per task** — if longer, break it up
+
 ---
 
-*Updated: 2026-02-15*
-
----
-
-## Agent Rules
-
-- **Concurrency:** Only 1 agent per task. Check sessions_list before spawning.
-- **Asana-Git:** Every commit must reference Asana task with `[TASK-ID]` prefix
-- **Blocking:** Always tell Harry when blocked + what you need
-
+*Updated: 2026-02-16*
