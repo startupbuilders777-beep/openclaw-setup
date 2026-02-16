@@ -32,23 +32,26 @@ export async function GET() {
     )
 
     // Aggregate metrics
-    const allTasks = results.flatMap(r => r.tasks)
+    const allTasks = results.flatMap(r => r.tasks) as {completed: boolean, assignee: unknown, notes?: string}[]
     const total = allTasks.length
-    const completed = allTasks.filter(t => t.completed).length
-    const inProgress = allTasks.filter(t => t.assignee && !t.completed).length
-    const unassigned = allTasks.filter(t => !t.assignee && !t.completed).length
-    const blocked = allTasks.filter(t => 
+    const completed = allTasks.filter((t: {completed: boolean}) => t.completed).length
+    const inProgress = allTasks.filter((t: {completed: boolean, assignee: unknown}) => t.assignee && !t.completed).length
+    const unassigned = allTasks.filter((t: {completed: boolean, assignee: unknown}) => !t.assignee && !t.completed).length
+    const blocked = allTasks.filter((t: {notes?: string}) => 
       t.notes && t.notes.toLowerCase().includes('blocked')
     ).length
 
     // Tasks by project
-    const byProject = results.map(r => ({
-      projectGid: r.projectGid,
-      total: r.tasks.length,
-      completed: r.tasks.filter(t => t.completed).length,
-      inProgress: r.tasks.filter(t => t.assignee && !t.completed).length,
-      unassigned: r.tasks.filter(t => !t.assignee && !t.completed).length,
-    }))
+    const byProject = results.map(r => {
+      const tasks = r.tasks as {completed: boolean, assignee: unknown}[]
+      return {
+        projectGid: r.projectGid,
+        total: tasks.length,
+        completed: tasks.filter(t => t.completed).length,
+        inProgress: tasks.filter(t => t.assignee && !t.completed).length,
+        unassigned: tasks.filter(t => !t.assignee && !t.completed).length,
+      }
+    })
 
     return NextResponse.json({
       total,
