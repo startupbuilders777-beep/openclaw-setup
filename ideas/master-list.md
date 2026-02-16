@@ -83,6 +83,7 @@
 33. **AI Brand Voice Monitor** - Detect unauthorized AI voice synthesis of brand content
 34. **BookFlow AI** - AI booking agent for service businesses (salons, contractors, consultants). Auto-handles scheduling, rescheduling, cancellations via SMS/email. Integrates with Google Calendar, Square, Stripe. SMBs lose 20%+ leads to scheduling friction - this solves it.
 35. **TruckCRM** - CRM for trade contractors (plumbers, electricians, HVAC, landscapers). Voice-to-estimate generation from job site photos/video, customer history, job scheduling, simple invoicing, SMS follow-ups. Most CRMs are too complex for guys with trucks - this is stripped down. $29-99/mo. $12B+ market, 12M+ US contractors.
+36. **CartRecall** - AI customer re-engagement engine for e-commerce. Analyzes purchase patterns to identify churned/at-risk customers, predicts optimal re-engagement timing, generates personalized email/SMS/retargeting campaigns with AI-written copy, and suggests discount levels that maximize ROI. Integrates with Shopify, Klaviyo, Stripe. SMB e-com brands lose 65%+ inactive customers - this brings them back. $49-149/mo.
 
 ---
 
