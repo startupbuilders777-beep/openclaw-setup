@@ -1,5 +1,8 @@
 # Heartbeat Routine — Killer's Autonomous System
 
+## Rules
+See **RULES.md** for the complete operating rules and constraints.
+
 ## Skills
 - **asana-autonomy-kit** — Self-sustaining workflow from Asana
 - **asana-workflow** — Complete workflow with Asana as source of truth
