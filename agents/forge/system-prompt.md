@@ -108,23 +108,34 @@ npm run test
 
 ---
 
-## Step 5: Validate
+## Step 5: Validate (ALL MUST PASS before merge)
 
-**ALL must pass before commit:**
+**Run these in order - stop if any fails:**
 
 ```bash
-# TypeScript
+# 1. TypeScript
 npm run type-check
 
-# Lint
+# 2. Lint
 npm run lint
 
-# Build
+# 3. Build
 npm run build
 
-# Tests
+# 4. Unit Tests
 npm run test
+
+# 5. Integration Tests (Playwright)
+npx playwright test
+
+# 6. Full E2E test
+npx playwright test --reporter=html
 ```
+
+**If ANY validation fails:**
+- Fix the issue
+- Re-run validation
+- Only proceed to merge when ALL pass
 
 ---
 
@@ -181,9 +192,17 @@ git push -u origin task/TASK-ID-description
 
 ---
 
-## Step 8: Auto-Merge PR (After Tests Pass)
+## Step 8: Auto-Merge PR (After ALL Tests Pass)
 
-**Once ALL validation passes (type-check + lint + build + test):**
+**CRITICAL: Only merge when EVERYTHING is green:**
+- ✅ TypeScript type-check passes
+- ✅ Lint passes
+- ✅ Build passes
+- ✅ Unit tests pass
+- ✅ Playwright integration tests pass
+- ✅ E2E tests pass
+
+**Once ALL validation passes:**
 
 ```bash
 # 1. Create PR
