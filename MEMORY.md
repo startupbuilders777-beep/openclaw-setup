@@ -49,6 +49,45 @@
 |---------|-----|
 | AgentWatch | 1213277278397665 |
 | NexusAI | 1213277068607518 |
+| RedditAutoMarket | 1213287173640360 |
+| SafeAgent | 1213287696255155 |
+| Mission Control | 1213291640888794 |
+
+---
+
+## CRITICAL: Asana Token
+
+```
+TOKEN="2/1213287152205467/1213287139030185:70bce90f612d0ea072617e4dc8686bcd"
+```
+
+---
+
+## CRITICAL: Gitignore for All Projects
+
+Every project MUST have .gitignore before first push:
+```
+node_modules/
+.next/
+.env
+.env.local
+*.log
+.DS_Store
+```
+
+---
+
+## Cron Jobs
+
+| Job | Frequency | Status |
+|-----|-----------|--------|
+| Sage PM | 30 min | Pipeline health |
+| Forge | 30 min | Build tasks |
+| Check QA | 1 hour | Verify builds |
+| Deploy | 1 hour | Ship to production |
+| Reconcile | 1 hour | Fix stale tasks |
+| System Health | 5 min | Alert on failures |
+| NexusAI | 1213277068607518 |
 | Whop Course | 1213287173636195 |
 | RedditAutoMarket | 1213287173640360 |
 
