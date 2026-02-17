@@ -81,3 +81,17 @@
 ---
 
 *Updated: 2026-02-17*
+
+---
+
+## CRITICAL RULES
+
+1. **NEVER restart, stop, or modify the openclaw gateway.** Do not run: `openclaw gateway restart`, `systemctl restart openclaw-gateway`, or any similar command. This kills your own session.
+2. **ALWAYS use Discord for messaging.** When using the `message` tool, set `channel=discord` and use numeric channel IDs as targets. Never use `whatsapp` or `telegram`.
+3. **Discord Channel IDs:**
+   - general: 1471824830872686757
+   - builds: 1471824870840078379
+   - qa: 1471824888913199105
+   - deploys: 1471824908735742003
+   - tasks: 1471824928255901807
+   - ideas: 1471824941925142589

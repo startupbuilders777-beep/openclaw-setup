@@ -256,3 +256,35 @@ enum NotificationStatus {
   FAILED
   RETRYING
 }
+
+// Stripe Customer - links Telegram users to Stripe customers
+model StripeCustomer {
+  id              String   @id @default(cuid())
+  telegramUserId  String   @unique
+  stripeCustomerId String  @unique // Stripe customer ID
+  stripeSubscriptionId String? // Active subscription ID
+  subscriptionStatus SubscriptionStatus?
+  planType        PlanType?
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([stripeCustomerId])
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+}
+
+enum PlanType {
+  FREE
+  PRO
+  AGENCY
+  ENTERPRISE
+}
