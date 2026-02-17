@@ -18,49 +18,44 @@
 
 | Project | Status | Priority |
 |---------|--------|----------|
-| **AgentWatch** | In Progress | P0 |
+| **SuperClaw** | In Progress | P0 - Stripe/Auth |
+| **AgentWatch** | In Progress | P1 |
 | **NexusAI** | In Progress | P1 |
 | **SafeAgent** | In Progress | P1 |
-| **Mission Control** | Planning | P2 |
+| **MissionControl** | Planning | P2 |
+
+---
+
+## GitHub Repos
+
+| Repo | Contents |
+|------|----------|
+| superclaw | agents + skills (Sage/Forge/Check/Deploy) |
+| openclaw-system | System files (renamed from reddit-automarket) |
+| agentwatch | AgentWatch code |
+| nexus-ai | NexusAI code |
+| safeagent | SafeAgent code |
+| mission-control | Mission Control dashboard |
 
 ---
 
 ## Agent Architecture
 
-| Agent | ID | Role | Workspace |
-|-------|----|------|-----------|
-| **Sage** | main | PM Coordinator | ~/.openclaw/workspace |
-| **Forge** | builder | Full-Stack Dev | ~/agents/builder |
-| **Check** | qa | QA Engineer (Playwright) | ~/agents/qa |
-| **Deploy** | deploy | DevOps | ~/agents/deploy |
-
-### Pipeline Flow
-```
-Sage (creates prioritized tasks in Asana)
-  → Forge (picks highest priority, builds, tests)
-    → Check (runs Playwright e2e, validates)
-      → Deploy (ships to production)
-        → Sage (monitors, reports to Harry)
-```
+| Agent | Role |
+|-------|------|
+| **Killer** | Coordinator (me) |
+| **Sage** | PM Coordinator |
+| **Forge** | Builder (auto-merges after tests pass) |
+| **Check** | QA Engineer |
+| **Deploy** | DevOps |
 
 ---
 
 ## Key Preferences
 
-- **Communication:** Discord (#general, #builds, #qa, #deploys, #ideas)
-- **Task Management:** Asana (ONLY source of truth)
-- **Code Style:** TypeScript, Tailwind, Prisma, Next.js 15
-- **Testing:** Playwright (e2e), Vitest (unit)
-- **No fluff:** Direct, actionable responses
-
----
-
-## Technical
-
-- **Gateway:** localhost:18789
-- **Model:** MiniMax M2.5 (all agents, all tasks)
-- **Exec:** Full mode (no approval needed)
-- **GitHub:** https://github.com/startupbuilders777-beep
+- **Communication:** Discord
+- **Task Management:** Asana ONLY
+- **Code:** TypeScript, Tailwind, Prisma, Next.js 15
 
 ---
 
@@ -68,71 +63,21 @@ Sage (creates prioritized tasks in Asana)
 
 | Project | GID |
 |---------|-----|
+| SuperClaw | 1213298519499157 |
 | AgentWatch | 1213277278397665 |
 | NexusAI | 1213277068607518 |
-| RedditAutoMarket | 1213287173640360 |
 | SafeAgent | 1213287696255155 |
-| Mission Control | 1213291640888794 |
-
-**Asana Token:** Available as `$ASANA_TOKEN` environment variable. Use it in API calls:
-```bash
-curl -s -H "Authorization: Bearer $ASANA_TOKEN" "https://app.asana.com/api/1.0/..."
-```
-
----
-
-## Task Priority System
-
-All tasks MUST have a priority tag in Asana:
-
-| Tag | Meaning | SLA |
-|-----|---------|-----|
-| `P0-critical` | Blocking, bugs, launch requirements | Build within 1 hour |
-| `P1-high` | Core features, important improvements | Build within 4 hours |
-| `P2-medium` | Nice-to-haves, optimizations | Build within 24 hours |
-| `P3-low` | Ideas, research, future work | When backlog is empty |
-
-Forge picks tasks in priority order. Sage ensures all tasks are tagged.
-
----
-
-## CRITICAL: Gitignore for All Projects
-
-Every project MUST have .gitignore before first push:
-```
-node_modules/
-.next/
-.env
-.env.local
-*.log
-.DS_Store
-dist/
-coverage/
-test-results/
-playwright-report/
-```
+| MissionControl | 1213291640888794 |
+| RedditAutoMarket | 1213287173640360 |
 
 ---
 
 ## CRITICAL: Rules
 
-### Source of Truth
-- **Asana IS the source of truth** — Always query Asana API directly
-- NEVER create local task files (no board.json, no QUEUE.md, no local boards)
-- NEVER post numbers from local files — only from real Asana queries
-
-### Honesty Protocol
-- Never fake progress, never post empty updates
-- If blocked → say "BLOCKED: [reason]" explicitly in Discord
-- If no real work happened → say that, don't fabricate
-- NEVER POST FAKE NUMBERS
-
-### Agent Discipline
-- **Concurrency:** Only 1 agent per task. Check before assigning.
-- **Commits:** Every commit must reference Asana task: `feat(scope): desc [ASANA-<gid>]`
-- **Blocking:** Always tell Harry when blocked + what you need to unblock
-- **Max 2 hours per task** — if longer, break it up
+- **Asana IS the source of truth** — Never create local task files
+- Use `gh api` for GitHub (handles auth)
+- Never fake progress
 
 ---
 
-*Updated: 2026-02-16*
+*Updated: 2026-02-17*
