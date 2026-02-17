@@ -1,97 +1,65 @@
-# MEMORY.md — Core Knowledge
+# Core Memory
 
-*What I know. Updated regularly.*
+## ⛔ CRITICAL RULES — ALWAYS FOLLOW
 
----
+1. **NEVER run gateway commands**: `openclaw gateway restart/stop/start/status`, `openclaw status`, `openclaw doctor`, `openclaw sessions`. The gateway is managed externally.
+2. **NEVER say the gateway is broken or needs restarting.** You cannot determine gateway health. Assume it works.
+3. **NEVER run `kill`, `pkill`, `shutdown`, `reboot`.**
+4. **Discord guild ID**: `1471824830260183176` — always include this when sending messages.
 
-## About Harry
+## Owner
 
-- **Name:** Harry
-- **Timezone:** EST
-- **GitHub:** startupbuilders777-beep
-- **Email:** startupbuilders777@gmail.com
-- **Goal:** Build multiple AI/automation SaaS businesses
-
----
-
-## Projects (Current)
-
-| Project | Status | Priority |
-|---------|--------|----------|
-| **SuperClaw** | In Progress | P0 - Stripe/Auth |
-| **AgentWatch** | In Progress | P1 |
-| **NexusAI** | In Progress | P1 |
-| **SafeAgent** | In Progress | P1 |
-| **MissionControl** | Planning | P2 |
-
----
-
-## GitHub Repos
-
-| Repo | Contents |
-|------|----------|
-| superclaw | agents + skills (Sage/Forge/Check/Deploy) |
-| openclaw-system | System files (renamed from reddit-automarket) |
-| agentwatch | AgentWatch code |
-| nexus-ai | NexusAI code |
-| safeagent | SafeAgent code |
-| mission-control | Mission Control dashboard |
-
----
+- **Name**: Harry (Discord: harman666666)
+- **GitHub**: startupbuilders777-beep
+- **Email**: startupbuilders777@gmail.com
+- **Role**: Founder — building AI SaaS products
 
 ## Agent Architecture
 
-| Agent | Role |
-|-------|------|
-| **Killer** | Coordinator (me) |
-| **Sage** | PM Coordinator |
-| **Forge** | Builder (auto-merges after tests pass) |
-| **Check** | QA Engineer |
-| **Deploy** | DevOps |
+| Agent | ID | Role | Channel | Channel ID |
+|-------|-----|------|---------|------------|
+| Sage | `main` | PM & Coordinator | #general, #tasks, #ideas | 1471824830872686757, 1471824928255901807, 1471824941925142589 |
+| Forge | `builder` | Full-stack developer | #builds | 1471824870840078379 |
+| Check | `qa` | QA engineer | #qa | 1471824888913199105 |
+| Deploy | `deploy` | DevOps | #deploys | 1471824908735742003 |
 
----
+**Pipeline**: Sage assigns → Forge builds → Check reviews → Deploy ships
 
-## Key Preferences
+## Active Projects
 
-- **Communication:** Discord
-- **Task Management:** Asana ONLY
-- **Code:** TypeScript, Tailwind, Prisma, Next.js 15
+| Project | Priority | Asana GID | GitHub Repo | Path |
+|---------|----------|-----------|-------------|------|
+| AgentWatch | P0 | 1213277278397665 | agent-watch | ~/.openclaw/workspace/projects/agentwatch |
+| SuperClaw | P0 | 1213298519499157 | — | — |
+| NexusAI | P1 | 1213277068607518 | nexus-ai | ~/.openclaw/workspace/projects/nexus-ai |
+| SafeAgent | P1 | 1213287696255155 | safe-agent | ~/.openclaw/workspace/projects/safeagent |
+| RedditAutoMarket | P1 | 1213287173640360 | reddit-auto-market | ~/.openclaw/workspace/projects/reddit-marketing-tool |
+| MissionControl | P2 | 1213291640888794 | mission-control | ~/.openclaw/workspace/projects/mission-control |
 
----
+## Asana API
 
-## Asana Projects
+```bash
+# Token is in $ASANA_TOKEN environment variable
+# List tasks in a project
+curl -s -H "Authorization: Bearer $ASANA_TOKEN" \
+  "https://app.asana.com/api/1.0/projects/{GID}/tasks?opt_fields=name,completed,due_on,notes,assignee_section.name&completed_since=now" | jq '.data'
+```
 
-| Project | GID |
-|---------|-----|
-| SuperClaw | 1213298519499157 |
-| AgentWatch | 1213277278397665 |
-| NexusAI | 1213277068607518 |
-| SafeAgent | 1213287696255155 |
-| MissionControl | 1213291640888794 |
-| RedditAutoMarket | 1213287173640360 |
+## GitHub
 
----
+```bash
+# Use gh CLI (authenticated)
+gh repo list startupbuilders777-beep --limit 20
+gh issue list -R startupbuilders777-beep/<repo>
+gh pr list -R startupbuilders777-beep/<repo>
+```
 
-## CRITICAL: Rules
+## Tech Stack
+- Next.js 15, React 19, TypeScript, Tailwind CSS, shadcn/ui
+- Prisma ORM, PostgreSQL
+- Vercel (deploy), AWS EC2 (this server)
+- pnpm package manager
 
-- **Asana IS the source of truth** — Never create local task files
-- Use `gh api` for GitHub (handles auth)
-- Never fake progress
-
----
-
-*Updated: 2026-02-17*
-
----
-
-## CRITICAL RULES
-
-1. **NEVER restart, stop, or modify the openclaw gateway.** Do not run: `openclaw gateway restart`, `systemctl restart openclaw-gateway`, or any similar command. This kills your own session.
-2. **ALWAYS use Discord for messaging.** When using the `message` tool, set `channel=discord` and use numeric channel IDs as targets. Never use `whatsapp` or `telegram`.
-3. **Discord Channel IDs:**
-   - general: 1471824830872686757
-   - builds: 1471824870840078379
-   - qa: 1471824888913199105
-   - deploys: 1471824908735742003
-   - tasks: 1471824928255901807
-   - ideas: 1471824941925142589
+## Notion
+- API Key available in skill config
+- Use for documentation and knowledge base

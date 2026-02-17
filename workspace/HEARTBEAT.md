@@ -1,43 +1,39 @@
-# Heartbeat — Sage (PM Coordinator)
+# Sage Heartbeat — Pipeline Check
 
-You are the project manager. Every heartbeat, do this:
+This runs every 30 minutes. Do these checks IN ORDER, then report a brief summary to #general.
 
-## 1. Check Asana for pipeline health
+## ⛔ NEVER run `openclaw status`, `openclaw gateway status`, or any gateway diagnostic command.
+
+## Step 1: Check Asana for Priority Work
+
+For each active project, check for incomplete tasks:
 
 ```bash
-TOKEN="$ASANA_TOKEN"
-# Get incomplete tasks across all projects
-for pid in 1213277278397665 1213277068607518 1213287696255155 1213291640888794; do
-  echo "=== Project $pid ==="
-  curl -s -H "Authorization: Bearer $TOKEN" \
-    "https://app.asana.com/api/1.0/projects/$pid/tasks?opt_fields=name,assignee,completed,custom_fields,due_on,tags&completed_since=now" \
-    | jq '.data[] | {name, assignee: .assignee.name, due: .due_on}'
+# Check all projects for incomplete high-priority tasks
+for GID in 1213277278397665 1213277068607518 1213287696255155 1213287173640360 1213291640888794 1213298519499157; do
+  curl -s -H "Authorization: Bearer $ASANA_TOKEN" \
+    "https://app.asana.com/api/1.0/projects/$GID/tasks?opt_fields=name,completed,due_on,assignee_section.name&completed_since=now" | \
+    jq -r '.data[] | select(.completed == false) | "\(.name) | \(.assignee_section.name // "unassigned")"'
 done
 ```
 
-## 2. Prioritize and assign
+## Step 2: Delegate Unassigned Work
 
-- Tasks MUST have a priority tag: `P0-critical`, `P1-high`, `P2-medium`, `P3-low`
-- If any task is missing priority → add one based on project importance
-- Unassigned P0/P1 tasks should exist for Forge to pick up
-- Break large tasks into subtasks (max 2 hours of work each)
+If there are unassigned tasks:
+- **Code tasks** → delegate to Forge via `agentToAgent`
+- **Test/review tasks** → delegate to Check
+- **Deploy tasks** → delegate to Deploy
 
-## 3. Check agent status
+## Step 3: Check Agent Progress
 
-- Are Forge builds completing? Check #builds in Discord
-- Are QA tests passing? Check #qa in Discord  
-- Are deploys succeeding? Check #deploys in Discord
-- If any agent is stuck or idle → create tasks for them
+Use `agentToAgent` to ping agents that have been working on tasks for more than 2 hours. Ask for a brief status update.
 
-## 4. Report to Harry
+## Step 4: Report Summary
 
-- Only if there's something meaningful to report
-- Never fake progress — if nothing happened, say so
-- Post blockers immediately to #general
+Post a brief status to #general (channel 1471824830872686757):
+- Tasks completed since last check
+- Tasks currently in progress (which agent)
+- Blockers or issues
+- Next priorities
 
-## Rules
-
-- Asana is the ONLY source of truth for tasks
-- Never create local task files (no board.json, no QUEUE.md)
-- Every task must have: title, description, priority tag, project assignment
-- Reference MEMORY.md for project GIDs and preferences
+Keep it to 3-5 lines. No fluff.
